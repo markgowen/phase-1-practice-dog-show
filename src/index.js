@@ -1,4 +1,7 @@
+let dogID = ""
+
 function init() {
+    updateDog()
     fetch('http://localhost:3000/dogs')
     .then(res => res.json())
     .then(function(data) {
@@ -32,6 +35,28 @@ function editDog(element, editBtn) {
         form.name.value = element.name
         form.breed.value = element.breed
         form.sex.value = element.sex
+        dogID = element.id
+    })
+}
+
+function updateDog() {
+    const form = document.querySelector("#dog-form")
+    
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        fetch(`http://localhost:3000/dogs/${dogID}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: form.name.value,
+                breed: form.breed.value,
+                sex: form.sex.value
+            })
+        })
+        .then(res => res.json())
     })
 }
 
